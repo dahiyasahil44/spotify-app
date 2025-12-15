@@ -15,12 +15,12 @@ export function useSpotifyData() {
             delimiter: ",",
             skipEmptyLines: true,
             dynamicTyping: true,
-            complete: (result) => {
+            complete: (result: { data: SpotifyTrack[]; }) => {
                 // console.log("Parsed data:", result.data);
                 setData(result.data as SpotifyTrack[]);
                 setLoading(false);
             },
-            error: (err) => {
+            error: (err: any) => {
                 console.error(err);
                 setError("Failed to parse Spotify dataset");
                 setLoading(false);
