@@ -14,6 +14,7 @@ export function DataTable({data}:{data: SpotifyTrack[]}){
     const [sorting, setSorting] = useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = useState("");
     const [columnVisibility, setColumnVisibility] = useState({});
+    const [rowSelection, setRowSelection] = useState({});
 
     useEffect(() => {
         const saved = localStorage.getItem("columnVisibility");
@@ -31,6 +32,23 @@ export function DataTable({data}:{data: SpotifyTrack[]}){
 
 
     const columns = useMemo<ColumnDef<SpotifyTrack>[]>(() => [
+        {
+            id: "select",
+            header: ({ table }) => (
+            <input
+                type="checkbox"
+                checked={table.getIsAllPageRowsSelected()}
+                onChange={table.getToggleAllPageRowsSelectedHandler()}
+            />
+            ),
+            cell: ({ row }) => (
+            <input
+                type="checkbox"
+                checked={row.getIsSelected()}
+                onChange={row.getToggleSelectedHandler()}
+            />
+            ),
+        },
         { accessorKey: "track_name", header: "Track" },
         { accessorKey: "track_artist", header: "Artist" },
         { accessorKey: "track_album_name", header: "Album" },
@@ -46,7 +64,9 @@ export function DataTable({data}:{data: SpotifyTrack[]}){
     const table = useReactTable({
         data,
         columns,
-        state: {sorting, globalFilter, columnVisibility },
+        state: {sorting, globalFilter, columnVisibility, rowSelection },
+        onRowSelectionChange: setRowSelection,
+        enableRowSelection: true,
         onColumnVisibilityChange: setColumnVisibility,
         onSortingChange: setSorting,
         onGlobalFilterChange: setGlobalFilter,

@@ -11,12 +11,20 @@ export function TableToolbar({ table }: any) {
     [table]
   );
 
-  const handleExport = () => {
-    const rows = table
-      .getSortedRowModel()
+  // const handleExport = () => {
+  //   const rows = table
+  //     .getSortedRowModel()
+  //     .rows.map((row: any) => row.original);
+
+  //   exportToCSV(rows);
+  // };
+
+  const handleExportSelected = () => {
+    const selectedRows = table
+      .getSelectedRowModel()
       .rows.map((row: any) => row.original);
 
-    exportToCSV(rows);
+    exportToCSV(selectedRows);
   };
 
   return (
@@ -29,8 +37,9 @@ export function TableToolbar({ table }: any) {
         style={{ padding: "0.5rem", width: "300px" }}
       />
 
-      <button onClick={handleExport}>
-        Download CSV
+      <button onClick={handleExportSelected} 
+      disabled={table.getSelectedRowModel().rows.length === 0}>
+        Export Selected
       </button>
     </div>
 
