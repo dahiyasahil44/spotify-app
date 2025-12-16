@@ -3,9 +3,10 @@ import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable, getFilte
 import type { SpotifyTrack } from "../types/spotify";
 import { useMemo, useState } from "react";
 import { TableToolbar } from "./TableToolbar";
+import type { SortingState } from "@tanstack/react-table";
 
 export function DataTable({data}:{data: SpotifyTrack[]}){
-    const [sorting, setSorting] = useState([]);
+    const [sorting, setSorting] = useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = useState("");
 
     const columns = useMemo<ColumnDef<SpotifyTrack>[]>(() => [
