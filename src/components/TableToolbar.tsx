@@ -20,6 +20,7 @@ export function TableToolbar({ table }: any) {
   };
 
   return (
+    <>
     <div style={{ marginBottom: "1rem", display: "flex", gap: "1rem" }}>
       <input
         type="text"
@@ -32,5 +33,20 @@ export function TableToolbar({ table }: any) {
         Download CSV
       </button>
     </div>
+
+    <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
+      {table.getAllLeafColumns().map((column: any) => (
+        <label key={column.id} style={{ fontSize: "0.9rem", textTransform: "capitalize" }}>
+          <input
+            type="checkbox"
+            checked={column.getIsVisible()}
+            onChange={column.getToggleVisibilityHandler()}
+          />{" "}
+          {column.id}
+        </label>
+      ))}
+    </div>
+
+    </>
   );
 }

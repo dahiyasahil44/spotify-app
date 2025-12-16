@@ -4,10 +4,31 @@ import type { SpotifyTrack } from "../types/spotify";
 import { useMemo, useState } from "react";
 import { TableToolbar } from "./TableToolbar";
 import type { SortingState } from "@tanstack/react-table";
+import { useEffect } from "react";
+
+
+
+
 
 export function DataTable({data}:{data: SpotifyTrack[]}){
     const [sorting, setSorting] = useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = useState("");
+    const [columnVisibility, setColumnVisibility] = useState({});
+
+    useEffect(() => {
+        const saved = localStorage.getItem("columnVisibility");
+        if (saved) {
+            setColumnVisibility(JSON.parse(saved));
+        }
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem(
+            "columnVisibility",
+            JSON.stringify(columnVisibility)
+        );
+    }, [columnVisibility]);
+
 
     const columns = useMemo<ColumnDef<SpotifyTrack>[]>(() => [
         { accessorKey: "track_name", header: "Track" },
@@ -25,7 +46,8 @@ export function DataTable({data}:{data: SpotifyTrack[]}){
     const table = useReactTable({
         data,
         columns,
-        state: {sorting, globalFilter},
+        state: {sorting, globalFilter, columnVisibility },
+        onColumnVisibilityChange: setColumnVisibility,
         onSortingChange: setSorting,
         onGlobalFilterChange: setGlobalFilter,
         getCoreRowModel: getCoreRowModel(),
